@@ -1,0 +1,113 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: A simple Twitter clone backend in Go
+  title: Twitter Clone API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user credentials
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login a user
+      tags:
+      - Auth
+  /post:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post (requires authentication)
+      parameters:
+      - description: Post Data
+        in: body
+        name: post
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a post
+      tags:
+      - Posts
+  /posts:
+    get:
+      description: Fetch all posts from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              additionalProperties:
+                type: string
+              type: object
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get all posts
+      tags:
+      - Posts
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a new user
+      tags:
+      - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

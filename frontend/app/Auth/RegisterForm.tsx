@@ -23,7 +23,7 @@ const RegisterForm = () => {
                     id="email"
                     name="email"
                     className="form-control"
-                    value={formData.email}
+                    value={formData.username}
                     onChange={handleChange}
                     required
                   />

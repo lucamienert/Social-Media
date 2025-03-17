@@ -1,15 +1,23 @@
 package controllers
 
 import (
-	"net/http"
 	"lucamienert/twitter-clone/config"
 	"lucamienert/twitter-clone/middleware"
 	"lucamienert/twitter-clone/models"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-// Register a new user
+// Register godoc
+// @Summary      Register a new user
+// @Description  Creates a new user account
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        user  body  map[string]string  true  "User Data"
+// @Success      201  {object}  map[string]string
+// @Router       /register [post]
 func Register(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -21,7 +29,15 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
 }
 
-// Login and get JWT
+// Login godoc
+// @Summary      Login a user
+// @Description  Authenticate user credentials
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        credentials  body  map[string]string  true  "Login Credentials"
+// @Success      200  {object}  map[string]string
+// @Router       /login [post]
 func Login(c *gin.Context) {
 	var user models.User
 	var input models.User

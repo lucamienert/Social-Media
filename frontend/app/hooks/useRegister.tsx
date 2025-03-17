@@ -6,7 +6,7 @@ import { useLoading } from '../Contexts/LoadingContext';
 export const useRegister = () => {
   const { setLoading } = useLoading();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
     confirmPassword: '',
   });
@@ -31,7 +31,14 @@ export const useRegister = () => {
     }
 
     try {
-      await axios.post('http://localhost:8080/register', formData);
+      await axios.post("http://localhost:8080/register", formData, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true  // Falls der Server Cookies oder Auth-Header braucht
+      })
+      .then(response => console.log("Success:", response.data))
+      .catch(error => console.error("Error:", error));
       window.location.href = '/login'; // Redirect to login page after registration
     } catch (err) {
       setError('Error during registration');

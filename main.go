@@ -10,8 +10,13 @@ import (
 // @description A simple Twitter clone backend in Go
 // @host localhost:8080
 // @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	config.InitDB()
+
 	r := routes.SetupRouter()
+
 	r.Run(":8080")
 }
