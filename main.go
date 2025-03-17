@@ -25,9 +25,14 @@ func main() {
 	userService := services.NewUserService(userRepo)
 	userController := controllers.NewUserController(userService)
 
+	postRepo := repository.NewPostRepository()
+	postService := services.NewPostService(postRepo)
+	postController := controllers.NewPostController(postService)
+
 	r := gin.Default()
 
 	routes.SetupUserRoutes(r, userController)
+	routes.SetupPostRoutes(r, postController)
 	routes.SetupRouter(r)
 
 	r.Run(":8080")

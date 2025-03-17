@@ -22,6 +22,14 @@ func SetupUserRoutes(router *gin.Engine, userController *controllers.UserControl
 	}
 }
 
+func SetupPostRoutes(router *gin.Engine, postController *controllers.PostController) {
+	postRoutes := router.Group("/")
+	{
+		postRoutes.POST("/post", postController.CreatePost)
+		postRoutes.GET("/posts", postController.GetPosts)
+	}
+}
+
 func SetupRouter(router *gin.Engine) {
 	// Enable Swagger
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
