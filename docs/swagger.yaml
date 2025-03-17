@@ -6,6 +6,32 @@ info:
   title: Twitter Clone API
   version: "1.0"
 paths:
+  /delete:
+    post:
+      consumes:
+      - application/json
+      description: Deletes a user account
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Deletes a user
+      tags:
+      - Auth
   /login:
     post:
       consumes:
