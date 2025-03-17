@@ -22,11 +22,16 @@ func SetupUserRoutes(router *gin.Engine, userController *controllers.UserControl
 	}
 }
 
-func SetupPostRoutes(router *gin.Engine, postController *controllers.PostController) {
+func SetupPostRoutes(router *gin.Engine, postController *controllers.PostController, commentController *controllers.CommentController) {
 	postRoutes := router.Group("/")
 	{
 		postRoutes.POST("/post", postController.CreatePost)
 		postRoutes.GET("/posts", postController.GetPosts)
+		postRoutes.POST("/post/:post_id/like", postController.LikePost)
+
+		postRoutes.POST("/post/:post_id/comment", commentController.AddComment)
+		router.GET("/post/:post_id/comments", commentController.GetComments)
+
 	}
 }
 

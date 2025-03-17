@@ -29,10 +29,14 @@ func main() {
 	postService := services.NewPostService(postRepo)
 	postController := controllers.NewPostController(postService)
 
+	commentRepo := repository.NewCommentRepository()
+	commentService := services.NewCommentService(commentRepo)
+	commentController := controllers.NewCommentController(commentService)
+
 	r := gin.Default()
 
 	routes.SetupUserRoutes(r, userController)
-	routes.SetupPostRoutes(r, postController)
+	routes.SetupPostRoutes(r, postController, commentController)
 	routes.SetupRouter(r)
 
 	r.Run(":8080")
