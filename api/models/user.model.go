@@ -13,7 +13,6 @@ type User struct {
 	Password  string    `gorm:"not null"`
 	Role      string    `gorm:"type:varchar(255);not null"`
 	Provider  string    `gorm:"not null"`
-	Photo     string    `gorm:"not null"`
 	Verified  bool      `gorm:"not null"`
 	CreatedAt time.Time `gorm:"not null"`
 	UpdatedAt time.Time `gorm:"not null"`

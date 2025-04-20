@@ -34,7 +34,7 @@ func NewAuthController(DB *gorm.DB) AuthController {
 // @Failure 400 {object} map[string]string "status: fail, message: Passwords do not match"
 // @Failure 409 {object} map[string]string "status: fail, message: User with that email already exists"
 // @Failure 502 {object} map[string]string "status: error, message: Something bad happened"
-// @Router /auth/signup [post]
+// @Router /api/auth/register [post]
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	var payload *models.SignUpInput
 
@@ -61,7 +61,6 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		Password:  hashedPassword,
 		Role:      "user",
 		Verified:  true,
-		Photo:     payload.Photo,
 		Provider:  "local",
 		CreatedAt: now,
 		UpdatedAt: now,
@@ -81,7 +80,6 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		ID:        newUser.ID,
 		Name:      newUser.Name,
 		Email:     newUser.Email,
-		Photo:     newUser.Photo,
 		Role:      newUser.Role,
 		Provider:  newUser.Provider,
 		CreatedAt: newUser.CreatedAt,
@@ -99,7 +97,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 // @Param input body models.SignInInput true "SignIn Input"
 // @Success 200 {object} map[string]string "status: success, access_token: token"
 // @Failure 400 {object} map[string]string "status: fail, message: Invalid email or Password"
-// @Router /auth/signin [post]
+// @Router /api/auth/login [post]
 func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	var payload *models.SignInInput
 
@@ -150,7 +148,7 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {object} map[string]string "status: success, access_token: new_token"
 // @Failure 403 {object} map[string]string "status: fail, message: Invalid or expired refresh token"
-// @Router /auth/refresh [get]
+// @Router /api/auth/refresh [get]
 func (ac *AuthController) RefreshAccessToken(ctx *gin.Context) {
 	message := "could not refresh access token"
 
@@ -195,7 +193,7 @@ func (ac *AuthController) RefreshAccessToken(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} map[string]string "status: success"
-// @Router /auth/logout [post]
+// @Router /api/auth/logout [post]
 func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.SetCookie("access_token", "", -1, "/", "localhost", false, true)
 	ctx.SetCookie("refresh_token", "", -1, "/", "localhost", false, true)

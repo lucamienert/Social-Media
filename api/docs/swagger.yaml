@@ -37,47 +37,7 @@ info:
   title: API
   version: "1.0"
 paths:
-  /auth/logout:
-    post:
-      consumes:
-      - application/json
-      description: Logs out the user by clearing the cookies
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'status: success'
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Log out the current user
-      tags:
-      - auth
-  /auth/refresh:
-    get:
-      consumes:
-      - application/json
-      description: Refreshes the access token when the refresh token is valid
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'status: success, access_token: new_token'
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "403":
-          description: 'status: fail, message: Invalid or expired refresh token'
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Refresh the access token using the refresh token
-      tags:
-      - auth
-  /auth/signin:
+  /api/auth/login:
     post:
       consumes:
       - application/json
@@ -107,7 +67,47 @@ paths:
       summary: User sign in
       tags:
       - auth
-  /auth/signup:
+  /api/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out the user by clearing the cookies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Log out the current user
+      tags:
+      - auth
+  /api/auth/refresh:
+    get:
+      consumes:
+      - application/json
+      description: Refreshes the access token when the refresh token is valid
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success, access_token: new_token'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: 'status: fail, message: Invalid or expired refresh token'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Refresh the access token using the refresh token
+      tags:
+      - auth
+  /api/auth/register:
     post:
       consumes:
       - application/json
@@ -148,7 +148,7 @@ paths:
       summary: User sign up
       tags:
       - auth
-  /user/me:
+  /api/user/me:
     get:
       consumes:
       - application/json

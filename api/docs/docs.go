@@ -15,68 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/logout": {
-            "post": {
-                "description": "Logs out the user by clearing the cookies",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Log out the current user",
-                "responses": {
-                    "200": {
-                        "description": "status: success",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/refresh": {
-            "get": {
-                "description": "Refreshes the access token when the refresh token is valid",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Refresh the access token using the refresh token",
-                "responses": {
-                    "200": {
-                        "description": "status: success, access_token: new_token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "status: fail, message: Invalid or expired refresh token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/signin": {
+        "/api/auth/login": {
             "post": {
                 "description": "Logs in an existing user and generates tokens",
                 "consumes": [
@@ -122,7 +61,68 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/signup": {
+        "/api/auth/logout": {
+            "post": {
+                "description": "Logs out the user by clearing the cookies",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Log out the current user",
+                "responses": {
+                    "200": {
+                        "description": "status: success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh": {
+            "get": {
+                "description": "Refreshes the access token when the refresh token is valid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh the access token using the refresh token",
+                "responses": {
+                    "200": {
+                        "description": "status: success, access_token: new_token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "status: fail, message: Invalid or expired refresh token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
             "post": {
                 "description": "Creates a new user account",
                 "consumes": [
@@ -184,7 +184,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/me": {
+        "/api/user/me": {
             "get": {
                 "security": [
                     {

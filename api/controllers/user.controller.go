@@ -27,7 +27,7 @@ func NewUserController(DB *gorm.DB) UserController {
 // @Failure 400 {object} map[string]string "status: fail, message: Bad request"
 // @Failure 401 {object} map[string]string "status: fail, message: Unauthorized"
 // @Security BearerAuth
-// @Router /user/me [get]
+// @Router /api/user/me [get]
 func (uc *UserController) GetMe(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
@@ -35,7 +35,6 @@ func (uc *UserController) GetMe(ctx *gin.Context) {
 		ID:        currentUser.ID,
 		Name:      currentUser.Name,
 		Email:     currentUser.Email,
-		Photo:     currentUser.Photo,
 		Role:      currentUser.Role,
 		Provider:  currentUser.Provider,
 		CreatedAt: currentUser.CreatedAt,

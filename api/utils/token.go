@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/base64"
 	"fmt"
 	"time"
@@ -8,31 +10,40 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func CreateToken(ttl time.Duration, payload interface{}, privateKey string) (string, error) {
+func CreateToken(ttl time.Duration, payload any, privateKey string) (string, error) {
 	decodedPrivateKey, err := base64.StdEncoding.DecodeString(privateKey)
 
 	if err != nil {
 		return "", fmt.Errorf("could not decode key: %w", err)
 	}
 
-	key, err := jwt.ParseRSAPrivateKeyFromPEM(decodedPrivateKey)
-
+	key, err := x509.ParsePKCS8PrivateKey(decodedPrivateKey)
 	if err != nil {
-		return "", fmt.Errorf("create: parse key: %w", err)
+		key, err = x509.ParsePKCS1PrivateKey(decodedPrivateKey)
+
+		if err != nil {
+			return "", fmt.Errorf("could not parse private key: %w", err)
+		}
+	}
+
+	rsaKey, ok := key.(*rsa.PrivateKey)
+
+	if !ok {
+		return "", fmt.Errorf("expected an RSA private key")
 	}
 
 	now := time.Now().UTC()
+	claims := jwt.MapClaims{
+		"sub": payload,
+		"exp": now.Add(ttl).Unix(),
+		"iat": now.Unix(),
+		"nbf": now.Unix(),
+	}
 
-	claims := make(jwt.MapClaims)
-	claims["sub"] = payload
-	claims["exp"] = now.Add(ttl).Unix()
-	claims["iat"] = now.Unix()
-	claims["nbf"] = now.Unix()
-
-	token, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(key)
+	token, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(rsaKey)
 
 	if err != nil {
-		return "", fmt.Errorf("create: sign token: %w", err)
+		return "", fmt.Errorf("could not sign token: %w", err)
 	}
 
 	return token, nil
