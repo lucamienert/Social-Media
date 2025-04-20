@@ -1,12 +1,16 @@
 package config
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
+	PORT         string `mapstructure:"PORT"`
+	ClientOrigin string `mapstructure:"ClientOrigin"`
+
 	DB_HOST     string `mapstructure:"DB_HOST"`
 	DB_PORT     string `mapstructure:"DB_PORT"`
 	DB_USER     string `mapstructure:"DB_USER"`
@@ -34,6 +38,7 @@ func LoadConfig(path string) (config Config, err error) {
 	err = viper.ReadInConfig()
 
 	if err != nil {
+		fmt.Printf("Error reading config file at path: %s\n", path)
 		return
 	}
 
