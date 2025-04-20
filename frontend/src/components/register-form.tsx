@@ -67,7 +67,7 @@ export function RegisterForm({
       }
 
     } catch (error) {
-      setError("An error occurred. Please try again.")
+      setError("An error occurred. Please try again." + error)
     } finally {
       setLoading(false)
     }

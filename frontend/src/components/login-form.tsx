@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/router"
 
 export function LoginForm({
   className,
@@ -25,7 +24,6 @@ export function LoginForm({
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -63,10 +61,9 @@ export function LoginForm({
 
       if (token) {
         localStorage.setItem("auth_token", token)
-        router.push("/dashboard")
       }
     } catch (error) {
-      setError("An error occurred. Please try again.")
+      setError("An error occurred. Please try again." + error)
     } finally {
       setLoading(false)
     }
