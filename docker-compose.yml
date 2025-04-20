@@ -1,6 +1,23 @@
-version: "3.9"
-
 services:
+  db:
+    build:
+      context: ./postgres
+    container_name: social-media-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   api:
     build:
       context: ./api
@@ -10,7 +27,8 @@ services:
     env_file:
       - ./api/app.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build:
@@ -22,19 +40,6 @@ services:
       - ./frontend/.env.local
     depends_on:
       - api
-
-  db:
-    image: postgres:15
-    container_name: social-media-db
-    restart: always
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "8081:8081"
 
 volumes:
   pgdata:

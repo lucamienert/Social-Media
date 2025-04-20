@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/lucamienert/Social-Media/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -27,7 +28,11 @@ func InitDB(cfg *Config) {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	//err = DB.AutoMigrate()
+	err = DB.AutoMigrate(
+		&models.SignInInput{},
+		&models.SignUpInput{},
+		&models.User{},
+	)
 
 	if err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
