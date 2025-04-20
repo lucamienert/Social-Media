@@ -10,7 +10,8 @@ import (
 	"github.com/lucamienert/Social-Media/config"
 	"github.com/lucamienert/Social-Media/controllers"
 	"github.com/lucamienert/Social-Media/routes"
-
+	_ "github.com/lucamienert/Social-Media/docs"
+	
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -26,7 +27,7 @@ var (
 // @title API
 // @version 1.0
 // @description Backend
-// @host localhost:8000
+// @host localhost:8080
 // @BasePath /
 // @securityDefinitions.apikey BearerAuth
 // @in header
