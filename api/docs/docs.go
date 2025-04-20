@@ -30,9 +30,12 @@ const docTemplate = `{
                 "summary": "Log out the current user",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "status: success",
                         "schema": {
-                            "$ref": "#/definitions/models.MessageResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -53,15 +56,21 @@ const docTemplate = `{
                 "summary": "Refresh the access token using the refresh token",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "status: success, access_token: new_token",
                         "schema": {
-                            "$ref": "#/definitions/models.TokenResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     },
                     "403": {
-                        "description": "Forbidden",
+                        "description": "status: fail, message: Invalid or expired refresh token",
                         "schema": {
-                            "$ref": "#/definitions/models.MessageResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -93,15 +102,21 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "status: success, access_token: token",
                         "schema": {
-                            "$ref": "#/definitions/models.TokenResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "status: fail, message: Invalid email or Password",
                         "schema": {
-                            "$ref": "#/definitions/models.MessageResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -109,7 +124,7 @@ const docTemplate = `{
         },
         "/auth/signup": {
             "post": {
-                "description": "Registers a new user with email and password",
+                "description": "Creates a new user account",
                 "consumes": [
                     "application/json"
                 ],
@@ -119,7 +134,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Sign up a new user",
+                "summary": "User sign up",
                 "parameters": [
                     {
                         "description": "SignUp Input",
@@ -133,21 +148,37 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Created",
+                        "description": "status: success, data: {user: models.UserResponse}",
                         "schema": {
-                            "$ref": "#/definitions/models.UserDataResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "status: fail, message: Passwords do not match",
                         "schema": {
-                            "$ref": "#/definitions/models.MessageResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     },
                     "409": {
-                        "description": "Conflict",
+                        "description": "status: fail, message: User with that email already exists",
                         "schema": {
-                            "$ref": "#/definitions/models.MessageResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "status: error, message: Something bad happened",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -173,21 +204,28 @@ const docTemplate = `{
                 "summary": "Get current authenticated user",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "status: success, data: {user: models.UserResponse}",
                         "schema": {
-                            "$ref": "#/definitions/models.UserMeResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "status: fail, message: Bad request",
                         "schema": {
-                            "$ref": "#/definitions/models.MessageResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "status: fail, message: Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/models.MessageResponse"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -195,17 +233,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.MessageResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
         "models.SignInInput": {
             "type": "object",
             "required": [
@@ -248,76 +275,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "models.TokenResponse": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserContainer": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "$ref": "#/definitions/models.UserResponse"
-                }
-            }
-        },
-        "models.UserDataResponse": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/models.UserContainer"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserMeResponse": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/models.UserContainer"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "photo": {
-                    "type": "string"
-                },
-                "provider": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
         }
     },
     "securityDefinitions": {
@@ -339,6 +296,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "Backend",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

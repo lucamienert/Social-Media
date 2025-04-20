@@ -1,12 +1,5 @@
 basePath: /
 definitions:
-  models.MessageResponse:
-    properties:
-      message:
-        type: string
-      status:
-        type: string
-    type: object
   models.SignInInput:
     properties:
       email:
@@ -37,51 +30,6 @@ definitions:
     - passwordConfirm
     - photo
     type: object
-  models.TokenResponse:
-    properties:
-      access_token:
-        type: string
-      status:
-        type: string
-    type: object
-  models.UserContainer:
-    properties:
-      user:
-        $ref: '#/definitions/models.UserResponse'
-    type: object
-  models.UserDataResponse:
-    properties:
-      data:
-        $ref: '#/definitions/models.UserContainer'
-      status:
-        type: string
-    type: object
-  models.UserMeResponse:
-    properties:
-      data:
-        $ref: '#/definitions/models.UserContainer'
-      status:
-        type: string
-    type: object
-  models.UserResponse:
-    properties:
-      created_at:
-        type: string
-      email:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      photo:
-        type: string
-      provider:
-        type: string
-      role:
-        type: string
-      updated_at:
-        type: string
-    type: object
 host: localhost:8000
 info:
   contact: {}
@@ -98,9 +46,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 'status: success'
           schema:
-            $ref: '#/definitions/models.MessageResponse'
+            additionalProperties:
+              type: string
+            type: object
       summary: Log out the current user
       tags:
       - auth
@@ -113,13 +63,17 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 'status: success, access_token: new_token'
           schema:
-            $ref: '#/definitions/models.TokenResponse'
+            additionalProperties:
+              type: string
+            type: object
         "403":
-          description: Forbidden
+          description: 'status: fail, message: Invalid or expired refresh token'
           schema:
-            $ref: '#/definitions/models.MessageResponse'
+            additionalProperties:
+              type: string
+            type: object
       summary: Refresh the access token using the refresh token
       tags:
       - auth
@@ -139,13 +93,17 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 'status: success, access_token: token'
           schema:
-            $ref: '#/definitions/models.TokenResponse'
+            additionalProperties:
+              type: string
+            type: object
         "400":
-          description: Bad Request
+          description: 'status: fail, message: Invalid email or Password'
           schema:
-            $ref: '#/definitions/models.MessageResponse'
+            additionalProperties:
+              type: string
+            type: object
       summary: User sign in
       tags:
       - auth
@@ -153,7 +111,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Registers a new user with email and password
+      description: Creates a new user account
       parameters:
       - description: SignUp Input
         in: body
@@ -165,18 +123,29 @@ paths:
       - application/json
       responses:
         "201":
-          description: Created
+          description: 'status: success, data: {user: models.UserResponse}'
           schema:
-            $ref: '#/definitions/models.UserDataResponse'
+            additionalProperties: true
+            type: object
         "400":
-          description: Bad Request
+          description: 'status: fail, message: Passwords do not match'
           schema:
-            $ref: '#/definitions/models.MessageResponse'
+            additionalProperties:
+              type: string
+            type: object
         "409":
-          description: Conflict
+          description: 'status: fail, message: User with that email already exists'
           schema:
-            $ref: '#/definitions/models.MessageResponse'
-      summary: Sign up a new user
+            additionalProperties:
+              type: string
+            type: object
+        "502":
+          description: 'status: error, message: Something bad happened'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User sign up
       tags:
       - auth
   /user/me:
@@ -188,17 +157,22 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 'status: success, data: {user: models.UserResponse}'
           schema:
-            $ref: '#/definitions/models.UserMeResponse'
+            additionalProperties: true
+            type: object
         "400":
-          description: Bad Request
+          description: 'status: fail, message: Bad request'
           schema:
-            $ref: '#/definitions/models.MessageResponse'
+            additionalProperties:
+              type: string
+            type: object
         "401":
-          description: Unauthorized
+          description: 'status: fail, message: Unauthorized'
           schema:
-            $ref: '#/definitions/models.MessageResponse'
+            additionalProperties:
+              type: string
+            type: object
       security:
       - BearerAuth: []
       summary: Get current authenticated user

@@ -23,9 +23,9 @@ func NewUserController(DB *gorm.DB) UserController {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200 {object} models.UserMeResponse
-// @Failure 400 {object} models.MessageResponse
-// @Failure 401 {object} models.MessageResponse
+// @Success 200 {object} map[string]interface{} "status: success, data: {user: models.UserResponse}"
+// @Failure 400 {object} map[string]string "status: fail, message: Bad request"
+// @Failure 401 {object} map[string]string "status: fail, message: Unauthorized"
 // @Security BearerAuth
 // @Router /user/me [get]
 func (uc *UserController) GetMe(ctx *gin.Context) {
