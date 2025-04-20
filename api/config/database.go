@@ -10,9 +10,9 @@ import (
 
 var DB *gorm.DB
 
-func InitDB(cfg Config) {
+func InitDB(cfg *Config) {
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC",
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		cfg.DB_HOST,
 		cfg.DB_USER,
 		cfg.DB_PASSWORD,
