@@ -3,7 +3,6 @@ services:
     build:
       context: ./postgres
     container_name: social-media-db
-    restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -38,6 +37,8 @@ services:
       - "3000:3000"
     env_file:
       - ./frontend/.env.local
+    environment:
+      - NEXT_PRIVATE_SWC_USE_WASM=true
     depends_on:
       - api
 
