@@ -5,6 +5,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -36,6 +37,18 @@ export default function Page() {
 
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <h1>Overview</h1>
+          <Card>
+            <CardHeader>Test</CardHeader>
+            <CardContent>AAA</CardContent>
+          </Card>
+          <Card>
+            <CardHeader>Test</CardHeader>
+            <CardContent>AAA</CardContent>
+          </Card>
+          <Card>
+            <CardHeader>Test</CardHeader>
+            <CardContent>AAA</CardContent>
+          </Card>
         </div>
       </SidebarInset>
     </SidebarProvider>
