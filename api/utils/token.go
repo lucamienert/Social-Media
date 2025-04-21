@@ -73,33 +73,37 @@ func CreateToken(ttl time.Duration, payload any, privateKey string) (string, err
 
 func ValidateToken(token string, publicKey string) (interface{}, error) {
 	decodedPublicKey, err := base64.StdEncoding.DecodeString(publicKey)
-
 	if err != nil {
-		return nil, fmt.Errorf("could not decode: %w", err)
+		return nil, fmt.Errorf("could not decode public key: %w", err)
 	}
 
-	key, err := jwt.ParseRSAPublicKeyFromPEM(decodedPublicKey)
-
-	if err != nil {
-		return "", fmt.Errorf("validate: parse key: %w", err)
+	var key *rsa.PublicKey
+	if block, _ := pem.Decode(decodedPublicKey); block != nil {
+		key, err = jwt.ParseRSAPublicKeyFromPEM(decodedPublicKey)
+		if err != nil {
+			return nil, fmt.Errorf("could not parse PEM public key: %w", err)
+		}
+	} else {
+		cert, err := x509.ParseCertificate(decodedPublicKey)
+		if err != nil {
+			return nil, fmt.Errorf("could not parse certificate: %w", err)
+		}
+		key = cert.PublicKey.(*rsa.PublicKey)
 	}
 
 	parsedToken, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
-			return nil, fmt.Errorf("unexpected method: %s", t.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %s", t.Header["alg"])
 		}
-
 		return key, nil
 	})
-
 	if err != nil {
-		return nil, fmt.Errorf("validate: %w", err)
+		return nil, fmt.Errorf("could not parse token: %w", err)
 	}
 
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
-
 	if !ok || !parsedToken.Valid {
-		return nil, fmt.Errorf("validate: invalid token")
+		return nil, fmt.Errorf("invalid token")
 	}
 
 	return claims["sub"], nil

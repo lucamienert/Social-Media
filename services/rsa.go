@@ -21,7 +21,7 @@ func generateRSAKeyPair(bits int) (*rsa.PrivateKey, *rsa.PublicKey, error) {
 }
 
 func encodePrivateKeyToBase64(privateKey *rsa.PrivateKey) (string, error) {
-	privBytes := x509.MarshalPKCS1PrivateKey(privateKey)
+	privBytes, _ := x509.MarshalPKCS8PrivateKey(privateKey)
 	privPem := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: privBytes})
 	return base64.StdEncoding.EncodeToString(privPem), nil
 }
