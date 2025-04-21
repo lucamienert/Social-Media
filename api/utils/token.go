@@ -4,26 +4,48 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/pem"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 )
 
+func cleanPrivateKey(rawKey string) string {
+	lines := strings.Split(rawKey, "\n")
+	cleanedLines := make([]string, 0, len(lines))
+
+	for _, line := range lines {
+		if idx := strings.Index(line, "|"); idx != -1 {
+			cleanedLines = append(cleanedLines, strings.TrimSpace(line[idx+1:]))
+		} else {
+			cleanedLines = append(cleanedLines, strings.TrimSpace(line))
+		}
+	}
+
+	return strings.Join(cleanedLines, "\n")
+}
+
 func CreateToken(ttl time.Duration, payload any, privateKey string) (string, error) {
-	decodedPrivateKey, err := base64.StdEncoding.DecodeString(privateKey)
+	cleanedKey := cleanPrivateKey(privateKey)
+
+	decodedPrivateKey, err := base64.StdEncoding.DecodeString(cleanedKey)
 
 	if err != nil {
 		return "", fmt.Errorf("could not decode key: %w", err)
 	}
 
-	key, err := x509.ParsePKCS8PrivateKey(decodedPrivateKey)
-	if err != nil {
-		key, err = x509.ParsePKCS1PrivateKey(decodedPrivateKey)
+	fmt.Println("Decoded Private Key: ", string(decodedPrivateKey))
 
-		if err != nil {
-			return "", fmt.Errorf("could not parse private key: %w", err)
-		}
+	block, _ := pem.Decode(decodedPrivateKey)
+	if block == nil {
+		return "", fmt.Errorf("failed to parse PEM block containing the private key")
+	}
+
+	key, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		return "", fmt.Errorf("could not parse private key: %w", err)
 	}
 
 	rsaKey, ok := key.(*rsa.PrivateKey)
