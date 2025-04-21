@@ -1,4 +1,4 @@
-import IndexLayout from "../layouts/index-layout"
+import IndexLayout from "../../layouts/index-layout"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { RegisterForm } from "@/components/register-form"
 

@@ -1,13 +1,9 @@
-"use client"
-
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -16,7 +12,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-export default function Settings() {
+export default function Page() {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -31,11 +27,7 @@ export default function Settings() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/overview">Overview</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Settings</BreadcrumbPage>
+                  <BreadcrumbPage>Overview</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -43,7 +35,7 @@ export default function Settings() {
         </header>
 
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <h1>Settings</h1>
+          <h1>Overview</h1>
         </div>
       </SidebarInset>
     </SidebarProvider>

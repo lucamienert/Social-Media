@@ -61,7 +61,7 @@ export function LoginForm({
 
       if (access_token && status === "success") {
         localStorage.setItem("auth_token", access_token)
-        window.location.href = '/dashboard'
+        window.location.href = '/overview'
       }
     } catch (error) {
       setError("An error occurred. Please try again." + error)

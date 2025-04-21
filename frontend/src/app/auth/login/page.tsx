@@ -1,5 +1,5 @@
 import { LoginForm } from "@/components/login-form"
-import IndexLayout from "../layouts/index-layout"
+import IndexLayout from "../../layouts/index-layout"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function Page() {
