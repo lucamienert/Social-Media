@@ -66,6 +66,7 @@ export function RegisterForm({
         return
       }
 
+      window.location.href = '/login'
     } catch (error) {
       setError("An error occurred. Please try again." + error)
     } finally {

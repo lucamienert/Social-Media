@@ -1,3 +1,5 @@
+"use client"
+
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,
@@ -13,8 +15,17 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { useEffect } from "react";
 
 export default function Page() {
+  useEffect(() => {
+    const authToken = localStorage.getItem('auth_token');
+
+    if (!authToken) {
+      window.location.href = '/login'
+    }
+  }, []);
+
   return (
     <SidebarProvider
       style={

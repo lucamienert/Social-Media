@@ -57,10 +57,11 @@ export function LoginForm({
         return
       }
 
-      const { token } = await response.json()
+      const { access_token, status } = await response.json()
 
-      if (token) {
-        localStorage.setItem("auth_token", token)
+      if (access_token && status === "success") {
+        localStorage.setItem("auth_token", access_token)
+        window.location.href = '/dashboard'
       }
     } catch (error) {
       setError("An error occurred. Please try again." + error)
